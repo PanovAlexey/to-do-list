@@ -1,8 +1,26 @@
 package presentation
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"todo-list/internal/app/application/services"
+)
 
 type Handler struct {
+	authorizationService services.AuthorizationServiceInterface
+	todoItemService      services.TodoItemServiceInterface
+	todoListService      services.TodoListServiceInterface
+}
+
+func NewHandler(
+	authorizationService services.AuthorizationServiceInterface,
+	todoItemService services.TodoItemServiceInterface,
+	todoListService services.TodoListServiceInterface,
+) *Handler {
+	return &Handler{
+		authorizationService: authorizationService,
+		todoItemService:      todoItemService,
+		todoListService:      todoListService,
+	}
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
