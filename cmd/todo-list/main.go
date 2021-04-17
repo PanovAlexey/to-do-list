@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/spf13/viper"
 	"log"
+	"todo-list/internal/app/infrastructure/databases"
 	"todo-list/internal/app/infrastructure/repositories"
 	"todo-list/internal/app/infrastructure/services"
 	"todo-list/internal/app/presentation"
@@ -14,9 +15,22 @@ func main() {
 		log.Fatalf("error initialization configs: %s", err.Error())
 	}
 
-	authorizationRepository := repositories.NewAuthorizationRepository()
-	todoItemRepository := repositories.NewTodoItemRepository()
-	todoListRepository := repositories.NewTodoListRepository()
+	database, err := databases.NewPostgresDB(databases.Config{
+		Host:     "localhost",
+		Port:     "5436",
+		Username: "postgres",
+		Password: "qwerty",
+		DBname:   "postgres",
+		SSLMode:  "disable",
+	})
+
+	if err != nil {
+		log.Fatalf("failed to initialize database: %s", err.Error())
+	}
+
+	authorizationRepository := repositories.NewAuthorizationRepository(database)
+	todoItemRepository := repositories.NewTodoItemRepository(database)
+	todoListRepository := repositories.NewTodoListRepository(database)
 
 	authorizationService := services.NewAuthorizationService(authorizationRepository)
 	todoItemService := services.NewTodoItemService(todoItemRepository)
