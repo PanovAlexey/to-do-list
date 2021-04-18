@@ -20,7 +20,7 @@ func main() {
 		Port:     "5436",
 		Username: "postgres",
 		Password: "qwerty",
-		DBname:   "postgres",
+		DBName:   "postgres",
 		SSLMode:  "disable",
 	})
 
