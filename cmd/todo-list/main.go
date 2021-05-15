@@ -16,12 +16,12 @@ func main() {
 	}
 
 	database, err := databases.NewPostgresDB(databases.Config{
-		Host:     "localhost",
-		Port:     "5436",
-		Username: "postgres",
-		Password: "qwerty",
-		DBName:   "postgres",
-		SSLMode:  "disable",
+		Host:     viper.GetString("db_host"),
+		Port:     viper.GetString("db_port"),
+		Username: viper.GetString("db_username"),
+		Password: viper.GetString("db_password"),
+		DBName:   viper.GetString("db_name"),
+		SSLMode:  viper.GetString("db_ssl_mode"),
 	})
 
 	if err != nil {
