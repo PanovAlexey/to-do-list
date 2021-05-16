@@ -1,8 +1,10 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"log"
+	"os"
 	"todo-list/internal/app/infrastructure/databases"
 	"todo-list/internal/app/infrastructure/repositories"
 	"todo-list/internal/app/infrastructure/services"
@@ -15,11 +17,15 @@ func main() {
 		log.Fatalf("error initialization configs: %s", err.Error())
 	}
 
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("error loading env variables: %s", err.Error())
+	}
+
 	database, err := databases.NewPostgresDB(databases.Config{
 		Host:     viper.GetString("db.host"),
 		Port:     viper.GetString("db.port"),
 		Username: viper.GetString("db.username"),
-		Password: viper.GetString("db.password"),
+		Password: os.Getenv("DB_PASSWORD"),
 		DBName:   viper.GetString("db.name"),
 		SSLMode:  viper.GetString("db.ssl_mode"),
 	})
