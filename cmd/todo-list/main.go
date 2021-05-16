@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"log"
 	"os"
 	"todo-list/internal/app/infrastructure/databases"
 	"todo-list/internal/app/infrastructure/repositories"
@@ -13,12 +13,14 @@ import (
 )
 
 func main() {
+	logrus.SetFormatter(new(logrus.JSONFormatter))
+
 	if err := initConfig(); err != nil {
-		log.Fatalf("error initialization configs: %s", err.Error())
+		logrus.Fatalf("error initialization configs: %s", err.Error())
 	}
 
 	if err := godotenv.Load(); err != nil {
-		log.Fatalf("error loading env variables: %s", err.Error())
+		logrus.Fatalf("error loading env variables: %s", err.Error())
 	}
 
 	database, err := databases.NewPostgresDB(databases.Config{
@@ -31,7 +33,7 @@ func main() {
 	})
 
 	if err != nil {
-		log.Fatalf("failed to initialize database: %s", err.Error())
+		logrus.Fatalf("failed to initialize database: %s", err.Error())
 	}
 
 	authorizationRepository := repositories.NewAuthorizationRepository(database)
@@ -47,7 +49,7 @@ func main() {
 	server := new(servers.Server)
 
 	if err := server.Run(viper.GetString("port"), handler.InitRoutes()); err != nil {
-		log.Fatalf("error occurred while running http server: %s", err.Error())
+		logrus.Fatalf("error occurred while running http server: %s", err.Error())
 	}
 }
 
