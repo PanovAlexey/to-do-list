@@ -14,6 +14,17 @@ func (h *Handler) signUp(c *gin.Context) {
 		responses.NewErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
+
+	id, err := h.authorizationService.CreateUser(input)
+
+	if err != nil {
+		responses.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"id": id,
+	})
 }
 
 func (h *Handler) signIn(c *gin.Context) {
