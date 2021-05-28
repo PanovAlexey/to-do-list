@@ -6,6 +6,7 @@ import (
 )
 
 type AuthorizationServiceInterface interface {
-	repositories.AuthorizationRepositoryInterface
 	CreateUser(user user.User) (int, error)
+	GenerateToken(username, password string) (string, error)
+	repositories.AuthorizationRepositoryInterface
 }
