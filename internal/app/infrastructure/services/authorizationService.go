@@ -40,8 +40,7 @@ func (service *AuthorizationService) CreateUser(user user.User) (int, error) {
 
 func (service *AuthorizationService) GenerateToken(username, password string) (string, error) {
 	user, err := service.repository.GetUser(username, service.generatePasswordHash(password))
-
-	if err == nil {
+	if err != nil {
 		return "", err
 	}
 
