@@ -7,4 +7,5 @@ import (
 type AuthorizationServiceInterface interface {
 	CreateUser(user user.User) (int, error)
 	GenerateToken(username, password string) (string, error)
+	ParseToken(token string) (int, error)
 }
